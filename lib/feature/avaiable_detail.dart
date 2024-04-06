@@ -28,12 +28,14 @@ class _AvailableDetailState extends State<AvailableDetail> {
             IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.red),
               onPressed: () {
-                Navigator.pop(context); // Navigate back when back arrow is clicked
+                Navigator.pop(
+                    context); // Navigate back when back arrow is clicked
               },
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: mediaQuery.width * 0.05), // Adjusted padding
+                padding: EdgeInsets.only(
+                    left: mediaQuery.width * 0.05), // Adjusted padding
                 child: Text(
                   'Back to Home',
                   style: TextStyle(
@@ -50,7 +52,8 @@ class _AvailableDetailState extends State<AvailableDetail> {
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: mediaQuery.width * 0.02), // Adjusted padding
+            padding: EdgeInsets.only(
+                right: mediaQuery.width * 0.02), // Adjusted padding
             child: Image.asset(
               'assets/images/logo.PNG', // Replace with your logo asset path
               width: mediaQuery.width * 0.08, // Adjusted width
@@ -65,7 +68,8 @@ class _AvailableDetailState extends State<AvailableDetail> {
           children: [
             SizedBox(height: mediaQuery.height * 0.03), // Add margin top
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.05), // Adjusted padding
+              padding: EdgeInsets.symmetric(
+                  horizontal: mediaQuery.width * 0.05), // Adjusted padding
               child: Text(
                 'Available',
                 style: TextStyle(
@@ -81,7 +85,8 @@ class _AvailableDetailState extends State<AvailableDetail> {
             SizedBox(height: mediaQuery.height * 0.04),
             // Display timestamp
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
+              padding: EdgeInsets.symmetric(
+                  horizontal: mediaQuery.width * 0.1), // Adjusted margin
               child: Container(
                 height: mediaQuery.height * 0.016, // Adjusted height
                 alignment: Alignment.centerLeft, // Align text to left
@@ -101,7 +106,8 @@ class _AvailableDetailState extends State<AvailableDetail> {
             SizedBox(height: mediaQuery.height * 0.016),
             // Button
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
+              padding: EdgeInsets.symmetric(
+                  horizontal: mediaQuery.width * 0.1), // Adjusted margin
               child: ElevatedButton(
                 onPressed: () {
                   // Add your button press logic here
@@ -134,7 +140,8 @@ class _AvailableDetailState extends State<AvailableDetail> {
             SizedBox(height: mediaQuery.height * 0.016),
             // New text view with the specified design
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
+              padding: EdgeInsets.symmetric(
+                  horizontal: mediaQuery.width * 0.1), // Adjusted margin
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -165,7 +172,8 @@ class _AvailableDetailState extends State<AvailableDetail> {
             SizedBox(height: mediaQuery.height * 0.008),
             // Box with the specified design
             Padding(
-              padding: EdgeInsets.fromLTRB(mediaQuery.width * 0.1, 0, mediaQuery.width * 0.05, 0), // Adjusted margins
+              padding: EdgeInsets.fromLTRB(mediaQuery.width * 0.1, 0,
+                  mediaQuery.width * 0.05, 0), // Adjusted margins
               child: Container(
                 height: mediaQuery.height * 0.18, // Adjusted height
                 width: mediaQuery.width * 0.8, // Adjusted width
@@ -180,8 +188,10 @@ class _AvailableDetailState extends State<AvailableDetail> {
                       _characterCount = text.length;
                     });
                     if (_characterCount > 100) {
-                      _textController.text = _textController.text.substring(0, 100);
-                      _textController.selection = TextSelection.collapsed(offset: 100);
+                      _textController.text =
+                          _textController.text.substring(0, 100);
+                      _textController.selection =
+                          TextSelection.collapsed(offset: 100);
                       setState(() {
                         _characterCount = 100;
                       });
@@ -199,7 +209,8 @@ class _AvailableDetailState extends State<AvailableDetail> {
             SizedBox(height: mediaQuery.height * 0.016),
             // Button with the specified design
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
+              padding: EdgeInsets.symmetric(
+                  horizontal: mediaQuery.width * 0.1), // Adjusted margin
               child: ElevatedButton(
                 onPressed: () {
                   // Add your button press logic here
@@ -236,7 +247,8 @@ class _AvailableDetailState extends State<AvailableDetail> {
               color: Color(0xFFF2F4F5),
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
+                  padding: EdgeInsets.symmetric(
+                      horizontal: mediaQuery.width * 0.1), // Adjusted margin
                   child: ElevatedButton(
                     onPressed: () {
                       // Add your button press logic here
@@ -257,7 +269,8 @@ class _AvailableDetailState extends State<AvailableDetail> {
                         style: TextStyle(
                           color: Color(0xFF174571),
                           fontFamily: 'Inter',
-                          fontSize: mediaQuery.height * 0.016, // Adjusted font size
+                          fontSize:
+                              mediaQuery.height * 0.016, // Adjusted font size
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0,
                         ),

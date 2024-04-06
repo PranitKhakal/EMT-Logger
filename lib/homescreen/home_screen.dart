@@ -10,6 +10,7 @@ import 'package:emt/feature/pt_transfarred_detail.dart';
 import 'package:emt/feature/scene_detail.dart';
 import 'package:emt/feature/second_custom_detail.dart';
 import 'package:emt/feature/second_vitals_detail.dart';
+import 'package:emt/sqlmethods/sql_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +21,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  List<Map<String,dynamic>> _notes=[];
+  bool _isLoading=true;
+
+  void refeshNotes()async{
+    final data=await SQLHelper.getNotes();
+    setState(() {
+      _notes=data;
+    _isLoading=false;
+    });
+  }
+
+@override
+  void initState(){
+    super.initState();
+    refeshNotes();
+    print("Number of Notes ${_notes.length}");
+  }
+
   // Map to store button colors, keyed by button text
   Map<String, Color> _buttonColors = {};
   Map<String, double> _buttonWidths = {};
@@ -244,7 +264,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 DispatchDetail(
                     timestamp:
                         _buttonGeneratedTimes["Mark as Dispatched 1"] ?? ""),
+
               ),
+              Text(_notes[0]['description'],style: TextStyle(
+                  color: Color.fromARGB(255, 122, 85, 85),
+                  fontFamily: 'Inter',
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0,
+                  height: 1.2,
+                ),),
               SizedBox(height: 16),
               _buildButtonSection(
                 "Mark as Acknowledged",
