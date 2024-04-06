@@ -60,6 +60,7 @@ class SQLHelper {
     try {
       await db.delete("emtnotes", where: "id=?", whereArgs: [id]);
     } catch (ex) {
+      print(ex);
       debugPrint("somwthing went wrong when delteting an note :$ex");
     }
   }
