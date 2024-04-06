@@ -6,14 +6,14 @@ class DispatchDetail extends StatefulWidget {
   final String timestamp; // Define a parameter to receive the timestamp
 
   // Constructor to receive the timestamp
-  DispatchDetail({required this.timestamp});
+  const DispatchDetail({super.key, required this.timestamp});
 
   @override
   _DispatchDetailState createState() => _DispatchDetailState();
 }
 
 class _DispatchDetailState extends State<DispatchDetail> {
-  TextEditingController _textController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
   int _characterCount = 0;
 
   Future<void> _addNote() async {
@@ -27,34 +27,21 @@ class _DispatchDetailState extends State<DispatchDetail> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(''), // Remove the title
-        leading: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.red),
-              onPressed: () {
-                Navigator.pop(
-                    context); // Navigate back when back arrow is clicked
-              },
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: mediaQuery.width * 0.05), // Adjusted padding
-                child: Text(
-                  'Back to Home',
-                  style: TextStyle(
-                    height: mediaQuery.height * 0.0025, // Adjusted height
-                    color: Color(0xFFC80605),
-                    fontFamily: 'Inter',
-                    fontSize: mediaQuery.height * 0.016, // Adjusted font size
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.red),
+          onPressed: () {
+            Navigator.pop(context); // Navigate back when back arrow is clicked
+          },
+        ),
+        title: Text(
+          'Back to Home',
+          style: TextStyle(
+            height: mediaQuery.height * 0.005, // Adjusted height
+            color: const Color(0xFFC80605),
+            fontFamily: 'Inter',
+            fontSize: mediaQuery.height * 0.016, // Adjusted font size
+            fontWeight: FontWeight.w600,
+          ),
         ),
         actions: [
           Padding(
@@ -81,7 +68,8 @@ class _DispatchDetailState extends State<DispatchDetail> {
                 style: TextStyle(
                   color: Color(0xFF1A4191),
                   fontFamily: 'Inter',
-                  fontSize: mediaQuery.height * 0.022, // Adjusted font size
+                  fontSize: mediaQuery.height * 0.022,
+                  // Adjusted font size
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0,
                   height: 1.25,
@@ -101,7 +89,8 @@ class _DispatchDetailState extends State<DispatchDetail> {
                   style: TextStyle(
                     color: Color(0xFF313131),
                     fontFamily: 'Inter',
-                    fontSize: mediaQuery.height * 0.016, // Adjusted font size
+                    fontSize: mediaQuery.height * 0.016,
+                    // Adjusted font size
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0,
                     height: 1.25,
@@ -112,8 +101,7 @@ class _DispatchDetailState extends State<DispatchDetail> {
             SizedBox(height: mediaQuery.height * 0.016),
             // Button
             Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: mediaQuery.width * 0.1), // Adjusted margin
+              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
               child: ElevatedButton(
                 onPressed: () {
                   // Add your button press logic here
@@ -135,7 +123,8 @@ class _DispatchDetailState extends State<DispatchDetail> {
                     style: TextStyle(
                       color: Color(0xFF313131),
                       fontFamily: 'Inter',
-                      fontSize: mediaQuery.height * 0.016, // Adjusted font size
+                      fontSize: mediaQuery.height * 0.016,
+                      // Adjusted font size
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0,
                     ),
@@ -157,7 +146,8 @@ class _DispatchDetailState extends State<DispatchDetail> {
                       height: 1.25,
                       color: Color(0xFF313131),
                       fontFamily: 'Inter',
-                      fontSize: mediaQuery.height * 0.016, // Adjusted font size
+                      fontSize: mediaQuery.height * 0.016,
+                      // Adjusted font size
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0,
                     ),
@@ -167,7 +157,8 @@ class _DispatchDetailState extends State<DispatchDetail> {
                     style: TextStyle(
                       color: Color(0xFF313131),
                       fontFamily: 'Inter',
-                      fontSize: mediaQuery.height * 0.016, // Adjusted font size
+                      fontSize: mediaQuery.height * 0.016,
+                      // Adjusted font size
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0,
                     ),
@@ -178,8 +169,9 @@ class _DispatchDetailState extends State<DispatchDetail> {
             SizedBox(height: mediaQuery.height * 0.008),
             // Box with the specified design
             Padding(
-              padding: EdgeInsets.fromLTRB(mediaQuery.width * 0.1, 0,
-                  mediaQuery.width * 0.05, 0), // Adjusted margins
+              padding: EdgeInsets.fromLTRB(
+                  mediaQuery.width * 0.1, 0, mediaQuery.width * 0.05, 0),
+              // Adjusted margins
               child: Container(
                 height: mediaQuery.height * 0.18, // Adjusted height
                 width: mediaQuery.width * 0.8, // Adjusted width
@@ -215,8 +207,8 @@ class _DispatchDetailState extends State<DispatchDetail> {
             SizedBox(height: mediaQuery.height * 0.016),
             // Button with the specified design
             Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: mediaQuery.width * 0.1), // Adjusted margin
+              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1),
+              // Adjusted margin
               child: ElevatedButton(
                 onPressed: () async {
                   await _addNote();
@@ -239,7 +231,8 @@ class _DispatchDetailState extends State<DispatchDetail> {
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Inter',
-                      fontSize: mediaQuery.height * 0.016, // Adjusted font size
+                      fontSize: mediaQuery.height * 0.016,
+                      // Adjusted font size
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0,
                     ),
@@ -259,7 +252,12 @@ class _DispatchDetailState extends State<DispatchDetail> {
                       horizontal: mediaQuery.width * 0.1), // Adjusted margin
                   child: ElevatedButton(
                     onPressed: () {
-                      // Add your button press logic here
+                      // Clear the text field
+                      _textController.clear();
+                      // Reset the character count
+                      setState(() {
+                        _characterCount = 0;
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
@@ -277,8 +275,8 @@ class _DispatchDetailState extends State<DispatchDetail> {
                         style: TextStyle(
                           color: Color(0xFF174571),
                           fontFamily: 'Inter',
-                          fontSize:
-                              mediaQuery.height * 0.016, // Adjusted font size
+                          fontSize: mediaQuery.height * 0.016,
+                          // Adjusted font size
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0,
                         ),
@@ -293,4 +291,10 @@ class _DispatchDetailState extends State<DispatchDetail> {
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: DispatchDetail(timestamp: "Timestamp"), // Adjust with your timestamp
+  ));
 }
