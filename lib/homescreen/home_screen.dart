@@ -266,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         _buttonGeneratedTimes["Mark as Dispatched 1"] ?? ""),
 
               ),
-              Text(_notes[0]['description'],style: TextStyle(
+              Text("",style: TextStyle(
                   color: Color.fromARGB(255, 122, 85, 85),
                   fontFamily: 'Inter',
                   fontSize: 17,
