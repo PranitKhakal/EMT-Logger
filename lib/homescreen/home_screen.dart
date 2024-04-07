@@ -1,19 +1,19 @@
-import 'package:emt/feature/avaiable_detail.dart';
-import 'package:emt/feature/dispatch_detail.dart';
-import 'package:emt/feature/acknowledge_detail.dart';
-import 'package:emt/feature/enroute_detail.dart';
-import 'package:emt/feature/first_custom_detail.dart';
-import 'package:emt/feature/first_vitals_detail.dart';
-import 'package:emt/feature/leaving_referral_detail.dart';
-import 'package:emt/feature/patient_detail.dart';
-import 'package:emt/feature/pt_transfarred_detail.dart';
-import 'package:emt/feature/scene_detail.dart';
-import 'package:emt/feature/second_custom_detail.dart';
-import 'package:emt/feature/second_vitals_detail.dart';
-import 'package:emt/sqlmethods/sql_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+
+import '../feature/acknowledge_detail.dart';
+import '../feature/avaiable_detail.dart';
+import '../feature/dispatch_detail.dart';
+import '../feature/enroute_detail.dart';
+import '../feature/first_custom_detail.dart';
+import '../feature/first_vitals_detail.dart';
+import '../feature/leaving_referral_detail.dart';
+import '../feature/patient_detail.dart';
+import '../feature/pt_transfarred_detail.dart';
+import '../feature/scene_detail.dart';
+import '../feature/second_custom_detail.dart';
+import '../feature/second_vitals_detail.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -21,26 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  List<Map<String,dynamic>> _notes=[];
-  bool _isLoading=true;
-
-  void refeshNotes()async{
-    final data=await SQLHelper.getNotes();
-    setState(() {
-      _notes=data;
-    _isLoading=false;
-    });
-  }
-
-@override
-  void initState(){
-    super.initState();
-    refeshNotes();
-    print("Number of Notes ${_notes.length}");
-  }
-
-  // Map to store button colors, keyed by button text
   Map<String, Color> _buttonColors = {};
   Map<String, double> _buttonWidths = {};
   Map<String, bool> _imageVisibilities = {};
@@ -62,48 +42,39 @@ class _HomeScreenState extends State<HomeScreen> {
       String text,
       Widget pageToNavigate,
       String dynamicText,
+      double screenWidth,
+      double fontSize,
+      double buttonWidth,
       ) {
-    // Initialize color for the button if not already set
     _buttonColors.putIfAbsent(buttonText, () => Color(0xFF2D56A9));
-    _buttonWidths.putIfAbsent(buttonText, () => 311);
-    _imageVisibilities.putIfAbsent(
-      buttonText,
-          () => false,
-    ); // Initially image is not visible
-    _buttonTexts.putIfAbsent(
-      buttonText,
-          () => buttonText,
-    ); // Set initial button text
+    _buttonWidths.putIfAbsent(buttonText, () => buttonWidth);
+    _imageVisibilities.putIfAbsent(buttonText, () => false);
+    _buttonTexts.putIfAbsent(buttonText, () => buttonText);
 
     return GestureDetector(
       onTap: () {
         setState(() {
-          // Update color for this button when clicked
-          _buttonColors[buttonText] = Color(0xFFFFFFFF); // Change color here
-          _buttonWidths[buttonText] = 261; // Update width of the button
-          _imageVisibilities[buttonText] = true; // Make the image visible
+          _buttonColors[buttonText] = Color(0xFFFFFFFF);
+          _buttonWidths[buttonText] = screenWidth * 0.7;
+          _imageVisibilities[buttonText] = true;
 
-          // Get current system time and date
           DateTime now = DateTime.now();
           DateFormat formatter = DateFormat('dd/MM/yy hh:mm a');
           String formattedDateTime = formatter.format(now);
 
-          // Update the button text with formatted date and time
           _buttonTexts[buttonText] = formattedDateTime;
-
-          // Store the generated time for this button
           _buttonGeneratedTimes[buttonText] = formattedDateTime;
         });
       },
       child: Container(
-        width: 375,
-        height: 135,
+        width: screenWidth * 0.9,
+        height: screenWidth * 0.32,
         decoration: BoxDecoration(
           color: Color(0xFFF2F4F5),
           borderRadius: BorderRadius.circular(8),
         ),
-        margin: EdgeInsets.symmetric(vertical: 8),
-        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.symmetric(vertical: screenWidth * 0.02),
+        padding: EdgeInsets.all(screenWidth * 0.04),
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
@@ -112,75 +83,79 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row( // New Row to contain both Text and Icon
-                    children: [
-                      Text(
-                        text,
-                        style: TextStyle(
-                          color: _buttonTexts[buttonText] != buttonText
-                              ? Colors.blue
-                              : Colors.red, // Check if timestamp is generated, change color to blue
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                  Expanded( // Added Expanded widget
+                    child: Row(
+                      children: [
+                        Text(
+                          text,
+                          style: TextStyle(
+                            color: _buttonTexts[buttonText] != buttonText
+                                ? Colors.blue
+                                : Colors.red,
+                            fontSize: fontSize,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Visibility(
-                        visible: _buttonColors[buttonText] == Color(0xFFFFFFFF),
-                        child: Icon(
-                          Icons.check,
-                          size: 20,
-                          color: Colors.blue, // Change color of the check icon as needed
+                        Visibility(
+                          visible: _buttonColors[buttonText] == Color(0xFFFFFFFF),
+                          child: Row(
+                            children: [
+                              SizedBox(width: screenWidth * 0.01),
+                              Container(
+                                width: screenWidth * 0.02,
+                                height: screenWidth * 0.02,
+                                child: SvgPicture.asset(
+                                  "assets/images/check.SVG",
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 4),
+              SizedBox(height: screenWidth * 0.01),
               Row(
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        // Update color for this button when clicked
-                        _buttonColors[buttonText] = Color(0xFFFFFFFF); // Change color here
-                        _buttonWidths[buttonText] = 261; // Update width of the button
-                        _imageVisibilities[buttonText] = true; // Make the image visible
+                  Expanded( // Added Expanded widget
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _buttonColors[buttonText] = Color(0xFFFFFFFF);
+                          _buttonWidths[buttonText] = screenWidth * 0.7;
+                          _imageVisibilities[buttonText] = true;
 
-                        // Get current system time and date
-                        DateTime now = DateTime.now();
-                        DateFormat formatter = DateFormat('dd/MM/yy hh:mm a');
-                        String formattedDateTime = formatter.format(now);
+                          DateTime now = DateTime.now();
+                          DateFormat formatter = DateFormat('dd/MM/yy hh:mm a');
+                          String formattedDateTime = formatter.format(now);
 
-                        // Update the button text with formatted date and time
-                        _buttonTexts[buttonText] = formattedDateTime;
-
-                        // Store the generated time for this button
-                        _buttonGeneratedTimes[buttonText] = formattedDateTime;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _buttonColors[buttonText], // Use stored color
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        side: BorderSide(color: Color(0xFFACACAC)),
+                          _buttonTexts[buttonText] = formattedDateTime;
+                          _buttonGeneratedTimes[buttonText] = formattedDateTime;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _buttonColors[buttonText],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          side: BorderSide(color: Color(0xFFACACAC)),
+                        ),
+                        fixedSize: Size(_buttonWidths[buttonText]!, screenWidth * 0.07),
                       ),
-                      fixedSize: Size(
-                          _buttonWidths[buttonText]!, 40
-                      ), // Use dynamic width
-                    ),
-                    child: Text(
-                      _buttonTexts[buttonText]!, // Use stored button text
-                      style: TextStyle(
-                        color: _buttonColors[buttonText] == Color(0xFFFFFFFF)
-                            ? Colors.black
-                            : Colors.white,
-                        // Change text color to black when button is clicked
-                        fontSize: 16,
+                      child: Text(
+                        _buttonTexts[buttonText]!,
+                        style: TextStyle(
+                          color: _buttonColors[buttonText] == Color(0xFFFFFFFF)
+                              ? Colors.black
+                              : Colors.white,
+                          fontSize: fontSize,
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 8), // Adjust spacing between button and image
+                  SizedBox(width: screenWidth * 0.02),
                   Visibility(
                     visible: _imageVisibilities[buttonText]!,
                     child: GestureDetector(
@@ -193,21 +168,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       child: Container(
-                        width: 40,
-                        height: 40,
+                        width: screenWidth * 0.1,
+                        height: screenWidth * 0.1,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Color(0xFFACACAC)),
                           color: Color(0xFF2D56A9),
                         ),
-                        padding: EdgeInsets.all(8),
-                        // Adjust padding as needed
+                        padding: EdgeInsets.all(screenWidth * 0.02),
                         child: Center(
                           child: Container(
-                            width: 24, // Adjust the width of the image
-                            height: 24, // Adjust the height of the image
+                            width: screenWidth * 0.06,
+                            height: screenWidth * 0.06,
                             child: SvgPicture.asset(
-                              'assets/images/Group.SVG', // Replace with your SVG image path
+                              'assets/images/Group.SVG',
                             ),
                           ),
                         ),
@@ -216,13 +190,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 4),
-              Text(
-                dynamicText, // Display dynamic text below the button
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black, // Change color as needed
-                ),
+              SizedBox(height: screenWidth * 0.01),
+              Row(
+                children: [
+                  Expanded( // Added Expanded widget
+                    child: Container(
+                      width: screenWidth * 0.03,
+                      height: screenWidth * 0.03,
+                      child: SvgPicture.asset(
+                        'assets/images/Group.SVG',
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: screenWidth * 0.005),
+                  Expanded( // Added Expanded widget
+                    flex: 8, // Added flex property to control width distribution
+                    child: Text(
+                      dynamicText,
+                      style: TextStyle(
+                        fontSize: fontSize * 0.8,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -231,11 +223,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildClearAllButton(BuildContext context) {
+
+  Widget _buildClearAllButton(
+      BuildContext context, double screenWidth, double fontSize) {
     return Center(
       child: Container(
-        height: 40,
-        width: 310.43,
+        height: screenWidth * 0.09,
+        width: screenWidth * 0.75,
         decoration: BoxDecoration(
           border: Border.all(color: Color(0xFFC80605), width: 2),
           borderRadius: BorderRadius.circular(5),
@@ -252,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
             'Clear All',
             style: TextStyle(
               color: Color(0xFFC80605),
-              fontSize: 16,
+              fontSize: fontSize,
             ),
           ),
         ),
@@ -276,8 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             TextButton(
               onPressed: () {
-                // Perform clear all action here
-                _resetButtonStates(); // Reset button states
+                _resetButtonStates();
                 Navigator.of(context).pop();
               },
               child: Text("Clear All"),
@@ -290,6 +283,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final fontSize = screenWidth * 0.04;
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -298,16 +295,16 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Image.asset(
                 'assets/images/logo.PNG',
-                width: 42,
-                height: 42,
+                width: screenWidth * 0.1,
+                height: screenWidth * 0.1,
               ),
-              SizedBox(width: 8),
-              const Text(
+              SizedBox(width: screenWidth * 0.02),
+              Text(
                 'Monmouth Junction EMT Time Log',
                 style: TextStyle(
                   color: Color(0xFF3A3A3A),
                   fontFamily: 'Inter',
-                  fontSize: 17,
+                  fontSize: screenWidth * 0.04,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0,
                   height: 1.2,
@@ -318,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(30.0),
+        padding: EdgeInsets.all(screenWidth * 0.08),
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
@@ -328,119 +325,151 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Mark as Dispatched 1",
                 "Dispatched",
                 DispatchDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark as Dispatched 1"] ?? ""), "Dynamic Text 1"
+                  timestamp:
+                      _buttonGeneratedTimes["Mark as Dispatched 1"] ?? "",
+                ),
+                "Dynamic Text 1",
+                screenWidth,
+                fontSize,
+                screenWidth * 0.7,
               ),
-              SizedBox(height: 16),
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
                 "Mark as Acknowledged",
                 "Acknowledged",
                 AcknowledgmentDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark as Acknowledged"] ?? ""), "Dynamic Text 1"
+                  timestamp:
+                      _buttonGeneratedTimes["Mark as Acknowledged"] ?? "",
+                ),
+                "Dynamic Text 1",
+                screenWidth,
+                fontSize,
+                screenWidth * 0.7,
               ),
-              SizedBox(height: 16),
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
                 "Mark as Enroute",
                 "Enroute",
                 EnRouteDetail(
-                    timestamp: _buttonGeneratedTimes["Mark as Enroute"] ?? ""), "Dynamic Text 1"
+                    timestamp: _buttonGeneratedTimes["Mark as Enroute"] ?? ""),
+                "Dynamic Text 1",
+                screenWidth,
+                fontSize,
+                screenWidth * 0.7,
               ),
-              SizedBox(height: 16),
-
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
-                "Mark as At Scene 4",
-                "Scene",
-                SceneDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark as At Scene 4"] ?? ""), "Dynamic Text 1"
-              ),
-              SizedBox(height: 16),
-
+                  "Mark as At Scene 4",
+                  "Scene",
+                  SceneDetail(
+                      timestamp:
+                          _buttonGeneratedTimes["Mark as At Scene 4"] ?? ""),
+                  "Dynamic Text 1",
+                  screenWidth,
+                  fontSize,
+                  screenWidth * 0.7),
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
-                "Mark as At Patient 5",
-                "Patient",
-                PatientDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark as At Patient 5"] ?? ""), "Dynamic Text 1"
+                  "Mark as At Patient 5",
+                  "Patient",
+                  PatientDetail(
+                      timestamp:
+                      _buttonGeneratedTimes["Mark as At Patient 5"] ?? ""), "Dynamic Text 1",
+                  screenWidth,
+                  fontSize,
+                  screenWidth * 0.7
               ),
-              SizedBox(height: 16),
-
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
-                "Mark Vitals 1 taken",
-                "Vitals 1",
-                FirstVitalsDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark Vitals 1 taken"] ?? ""), "Dynamic Text 1"
+                  "Mark Vitals 1 taken",
+                  "Vitals 1",
+                  FirstVitalsDetail(
+                      timestamp:
+                      _buttonGeneratedTimes["Mark Vitals 1 taken"] ?? ""), "Dynamic Text 1",
+                  screenWidth,
+                  fontSize,
+                  screenWidth * 0.7
               ),
-              SizedBox(height: 16),
-
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
-                "Mark Vitals 2 taken",
-                "Vitals 2",
-                SecondVitalsDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark Vitals 2 taken"] ?? ""), "Dynamic Text 1"
+                  "Mark Vitals 2 taken",
+                  "Vitals 2",
+                  SecondVitalsDetail(
+                      timestamp:
+                      _buttonGeneratedTimes["Mark Vitals 2 taken"] ?? ""), "Dynamic Text 1",
+                  screenWidth,
+                  fontSize,
+                  screenWidth * 0.7
               ),
-              SizedBox(height: 16),
-
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
-                "Mark as Leaving Referral",
-                "Leaving Referral",
-                LeavingReferralDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark as Leaving Referral"] ?? ""), "Dynamic Text 1"
+                  "Mark as Leaving Referral",
+                  "Leaving Referral",
+                  LeavingReferralDetail(
+                      timestamp:
+                      _buttonGeneratedTimes["Mark as Leaving Referral"] ?? ""), "Dynamic Text 1",
+                  screenWidth,
+                  fontSize,
+                  screenWidth * 0.7
               ),
-              SizedBox(height: 16),
-
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
-                "Mark as At Hospital",
-                "At Hospital",
-                AcknowledgmentDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark as At Hospital"] ?? ""), "Dynamic Text 1"
+                  "Mark as At Hospital",
+                  "At Hospital",
+                  AcknowledgmentDetail(
+                      timestamp:
+                      _buttonGeneratedTimes["Mark as At Hospital"] ?? ""), "Dynamic Text 1",
+                  screenWidth,
+                  fontSize,
+                  screenWidth * 0.7
               ),
-              SizedBox(height: 16),
-
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
-                "Mark as Pt Transferred",
-                "Pt Transferred",
-                PtTransferredDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark as Pt Transferred"] ?? ""), "Dynamic Text 1"
+                  "Mark as Pt Transferred",
+                  "Pt Transferred",
+                  PtTransferredDetail(
+                      timestamp:
+                      _buttonGeneratedTimes["Mark as Pt Transferred"] ?? ""), "Dynamic Text 1",
+                  screenWidth,
+                  fontSize,
+                  screenWidth * 0.7
               ),
-              SizedBox(height: 16),
-
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
-                "Mark as Available",
-                "Available",
-                AvailableDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark as Available"] ?? ""), "Dynamic Text 1"
+                  "Mark as Available",
+                  "Available",
+                  AvailableDetail(
+                      timestamp:
+                      _buttonGeneratedTimes["Mark as Available"] ?? ""), "Dynamic Text 1",
+                  screenWidth,
+                  fontSize,
+                  screenWidth * 0.7
               ),
-              SizedBox(height: 16),
-
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
-                "Mark as Custom 1",
-                "Custom 1",
-                FirstCustomDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark as Custom 1"] ?? ""), "Dynamic Text 1"
+                  "Mark as Custom 1",
+                  "Custom 1",
+                  FirstCustomDetail(
+                      timestamp:
+                      _buttonGeneratedTimes["Mark as Custom 1"] ?? ""), "Dynamic Text 1",
+                  screenWidth,
+                  fontSize,
+                  screenWidth * 0.7
               ),
-              SizedBox(height: 16),
-
+              SizedBox(height: screenHeight * 0.02),
               _buildButtonSection(
-                "Mark as Custom 2",
-                "Custom 2",
-                SecondCustomDetail(
-                    timestamp:
-                        _buttonGeneratedTimes["Mark as Custom 2"] ?? ""), "Dynamic Text 1"
+                  "Mark as Custom 2",
+                  "Custom 2",
+                  SecondCustomDetail(
+                      timestamp:
+                      _buttonGeneratedTimes["Mark as Custom 2"] ?? ""), "Dynamic Text 1",
+                  screenWidth,
+                  fontSize,
+                  screenWidth * 0.7
               ),
-              SizedBox(height: 16),
-
-              _buildClearAllButton(context),
-              // Adding Clear All button
-              SizedBox(height: 16),
+              SizedBox(height: screenHeight * 0.02),
+              _buildClearAllButton(context, screenWidth, fontSize),
+              SizedBox(height: screenHeight * 0.02),
             ],
           ),
         ),

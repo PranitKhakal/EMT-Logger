@@ -1,50 +1,60 @@
 import 'package:flutter/material.dart';
-import '../sqlmethods/sql_helper.dart';
 
 class DispatchDetail extends StatefulWidget {
-  final String timestamp;
+  final String timestamp; // Define a parameter to receive the timestamp
 
-  const DispatchDetail({Key? key, required this.timestamp}) : super(key: key);
+  // Constructor to receive the timestamp
+  DispatchDetail({required this.timestamp});
 
   @override
   _DispatchDetailState createState() => _DispatchDetailState();
 }
 
 class _DispatchDetailState extends State<DispatchDetail> {
-  final TextEditingController _textController = TextEditingController();
+  TextEditingController _textController = TextEditingController();
   int _characterCount = 0;
-
-  Future<void> _addNote() async {
-    await SQLHelper.createNotes("dispatch", _textController.text);
-  }
 
   @override
   Widget build(BuildContext context) {
+    // Store MediaQuery size
+    final mediaQuery = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.red),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          'Back to Home',
-          style: TextStyle(
-            height: 1.0,
-            color: const Color(0xFFC80605),
-            fontFamily: 'Inter',
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+        title: Text(''), // Remove the title
+        leading: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.red),
+              onPressed: () {
+                Navigator.pop(context); // Navigate back when back arrow is clicked
+              },
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: mediaQuery.width * 0.05), // Adjusted padding
+                child: Text(
+                  'Back to Home',
+                  style: TextStyle(
+                    height: mediaQuery.height * 0.005, // Adjusted height
+                    color: Color(0xFFC80605),
+                    fontFamily: 'Inter',
+                    fontSize: mediaQuery.height * 0.03, // Adjusted font size
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 10),
+            padding: EdgeInsets.only(right: mediaQuery.width * 0.02), // Adjusted padding
             child: Image.asset(
-              'assets/images/logo.PNG',
-              width: 40,
-              height: 30,
+              'assets/images/logo.PNG', // Replace with your logo asset path
+              width: mediaQuery.width * 0.1, // Adjusted width
+              height: mediaQuery.height * 0.08, // Adjusted height
             ),
           ),
         ],
@@ -53,63 +63,71 @@ class _DispatchDetailState extends State<DispatchDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
+            SizedBox(height: mediaQuery.height * 0.01), // Add margin top
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted padding
               child: Text(
                 'Dispatched',
                 style: TextStyle(
-                  height: 1.0,
                   color: Color(0xFF1A4191),
                   fontFamily: 'Inter',
-                  fontSize: 22,
+                  fontSize: mediaQuery.height * 0.04, // Adjusted font size
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0,
+                  height: 1.25,
                 ),
               ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: mediaQuery.height * 0.06),
+            // Display timestamp
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Date and Time:',
-                  style: TextStyle(
-                    color: Color(0xFF313131),
-                    fontFamily: 'Inter',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0,
+              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: mediaQuery.width * 0.3, // Adjusted width
+                    child: Text(
+                      'Date and Time:',
+                      style: TextStyle(
+                        color: Color(0xFF313131),
+                        fontFamily: 'Inter',
+                        fontSize: mediaQuery.height * 0.025, // Adjusted font size
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0,
+                        height: 1.25,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: mediaQuery.height * 0.02),
+            // Button
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
               child: ElevatedButton(
                 onPressed: () {
-                  // Your button press logic here
+                  // Add your button press logic here
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.transparent,
                   backgroundColor: Colors.white,
-                  side: BorderSide(color: Color(0xFFACACAC), width: 1),
+                  side: BorderSide(color: Color(0xFFACACAC), width: 2),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
                 child: Container(
-                  height: 40,
-                  width: 300,
+                  height: mediaQuery.height * 0.06, // Adjusted height
+                  width: mediaQuery.width * 0.8, // Adjusted width
                   alignment: Alignment.center,
                   child: Text(
-                    widget.timestamp,
+                    widget.timestamp, // Your button text
                     style: TextStyle(
                       color: Color(0xFF313131),
                       fontFamily: 'Inter',
-                      fontSize: 18,
+                      fontSize: mediaQuery.height * 0.03, // Adjusted font size
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0,
                     ),
@@ -117,9 +135,10 @@ class _DispatchDetailState extends State<DispatchDetail> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: mediaQuery.height * 0.02),
+            // New text view with the specified design
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -129,7 +148,7 @@ class _DispatchDetailState extends State<DispatchDetail> {
                       height: 1.25,
                       color: Color(0xFF313131),
                       fontFamily: 'Inter',
-                      fontSize: 16,
+                      fontSize: mediaQuery.height * 0.025, // Adjusted font size
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0,
                     ),
@@ -139,7 +158,7 @@ class _DispatchDetailState extends State<DispatchDetail> {
                     style: TextStyle(
                       color: Color(0xFF313131),
                       fontFamily: 'Inter',
-                      fontSize: 16,
+                      fontSize: mediaQuery.height * 0.025, // Adjusted font size
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0,
                     ),
@@ -147,15 +166,16 @@ class _DispatchDetailState extends State<DispatchDetail> {
                 ],
               ),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: mediaQuery.height * 0.01),
+            // Box with the specified design
             Padding(
-              padding: EdgeInsets.fromLTRB(40, 0, 32, 0), // Updated padding
+              padding: EdgeInsets.fromLTRB(mediaQuery.width * 0.1, 0, mediaQuery.width * 0.05, 0), // Adjusted margins
               child: Container(
-                height: 237,
-                width: MediaQuery.of(context).size.width,
+                height: mediaQuery.height * 0.2, // Adjusted height
+                width: mediaQuery.width * 0.8, // Adjusted width
                 decoration: BoxDecoration(
                   border: Border.all(color: Color(0xFFACACAC), width: 2),
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextField(
                   controller: _textController,
@@ -164,10 +184,8 @@ class _DispatchDetailState extends State<DispatchDetail> {
                       _characterCount = text.length;
                     });
                     if (_characterCount > 100) {
-                      _textController.text =
-                          _textController.text.substring(0, 100);
-                      _textController.selection =
-                          TextSelection.collapsed(offset: 100);
+                      _textController.text = _textController.text.substring(0, 100);
+                      _textController.selection = TextSelection.collapsed(offset: 100);
                       setState(() {
                         _characterCount = 100;
                       });
@@ -182,31 +200,31 @@ class _DispatchDetailState extends State<DispatchDetail> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: mediaQuery.height * 0.02),
+            // Button with the specified design
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
               child: ElevatedButton(
-                onPressed: () async {
-                  await _addNote();
-                  Navigator.of(context).pop();
+                onPressed: () {
+                  // Add your button press logic here
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF5AA441),
-                  side: BorderSide(color: Color(0xFFACACAC), width: 1),
+                  side: BorderSide(color: Color(0xFFACACAC), width: 2),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
                 child: Container(
-                  height: 40,
-                  width: 300,
+                  height: mediaQuery.height * 0.06, // Adjusted height
+                  width: mediaQuery.width * 0.8, // Adjusted width
                   alignment: Alignment.center,
                   child: Text(
-                    'Save',
+                    'Save', // Your button text
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Inter',
-                      fontSize: 16,
+                      fontSize: mediaQuery.height * 0.03, // Adjusted font size
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0,
                     ),
@@ -214,38 +232,36 @@ class _DispatchDetailState extends State<DispatchDetail> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: mediaQuery.height * 0.02),
+            // Container with the specified design
             Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
+              height: mediaQuery.height * 0.1, // Adjusted height
+              width: mediaQuery.width, // Adjust width to match screen width
               color: Color(0xFFF2F4F5),
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1), // Adjusted margin
                   child: ElevatedButton(
                     onPressed: () {
-                      _textController.clear();
-                      setState(() {
-                        _characterCount = 0;
-                      });
+                      // Add your button press logic here
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       side: BorderSide(color: Color(0xFF174571), width: 2),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
                     child: Container(
-                      height: 40,
-                      width: 300,
+                      height: mediaQuery.height * 0.06, // Adjusted height
+                      width: mediaQuery.width * 0.8, // Adjusted width
                       alignment: Alignment.center,
                       child: Text(
-                        'Clear',
+                        'Clear', // Your button text
                         style: TextStyle(
                           color: Color(0xFF174571),
                           fontFamily: 'Inter',
-                          fontSize: 16,
+                          fontSize: mediaQuery.height * 0.03, // Adjusted font size
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0,
                         ),
@@ -260,10 +276,4 @@ class _DispatchDetailState extends State<DispatchDetail> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: DispatchDetail(timestamp: "Timestamp"),
-  ));
 }
